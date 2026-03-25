@@ -8,7 +8,7 @@ from backend.auth import verify_password, create_access_token, decode_token
 from fastapi.security import OAuth2PasswordBearer
 from fastapi import Body
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 app = FastAPI(title="Generated Todo API")
 
 init_db()
@@ -47,15 +47,19 @@ def signup(user: schemas.UserCreate, db: Session = Depends(get_db)):
 
     return crud.create_user(db, user.username, user.password)
 
-@app.post("/login")
-def login(user: schemas.UserLogin, db: Session = Depends(get_db)):
-    db_user = crud.get_user(db, user.username)
+@app.post("/token")
+def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    user = crud.get_user(db, form_data.username)
 
-    if not db_user or not verify_password(user.password, db_user.password):
+    if not user or not verify_password(form_data.password, user.password):
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
-    token = create_access_token({"sub": db_user.username})
-    return {"access_token": token, "token_type": "bearer"}
+    access_token = create_access_token({"sub": user.username})
+
+    return {
+        "access_token": access_token,
+        "token_type": "bearer"
+    }
 
 def get_current_user(token: str = Depends(oauth2_scheme)):
     payload = decode_token(token)
