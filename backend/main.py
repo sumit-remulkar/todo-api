@@ -7,6 +7,7 @@ from backend.database import SessionLocal, init_db
 from backend.auth import verify_password, create_access_token, decode_token
 from fastapi.security import OAuth2PasswordBearer
 from fastapi import Body
+from fastapi.security import OAuth2PasswordRequestForm
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 app = FastAPI(title="Generated Todo API")
