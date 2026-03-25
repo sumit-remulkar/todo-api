@@ -1,0 +1,20 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Node
+node_modules/
+
+# Env
+.env
+
+# Mac
+.DS_Store
+
+# Database
+*.db
+
+# Logs
+*.log

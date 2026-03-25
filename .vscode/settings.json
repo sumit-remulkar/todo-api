@@ -1,0 +1,5 @@
+{
+    "python.analysis.extraPaths": [
+        "./workspace/generated_projects/generated_project"
+    ]
+}
