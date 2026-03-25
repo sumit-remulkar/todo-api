@@ -6,8 +6,10 @@ class TodoBase(BaseModel):
     description: Optional[str] = None
     priority: Optional[str] = "medium"
 
-class TodoCreate(TodoBase):
-    id: int   
+class TodoCreate(BaseModel):
+    title: str
+    description: Optional[str] = None
+    priority: Optional[str] = "medium"
 
 class TodoOut(TodoBase):
     id: int

@@ -6,6 +6,7 @@ from backend import crud, schemas
 from backend.database import SessionLocal, init_db
 from backend.auth import verify_password, create_access_token, decode_token
 from fastapi.security import OAuth2PasswordBearer
+from fastapi import Body
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 app = FastAPI(title="Generated Todo API")
@@ -35,7 +36,7 @@ def get_item(item_id: int, db: Session = Depends(get_db)):
     return item
 
 @app.post("/items/", response_model=schemas.TodoOut)
-def create_item(todo: schemas.TodoCreate, db: Session = Depends(get_db)):
+def create_item(todo: schemas.TodoCreate = Body(...), db: Session = Depends(get_db)):
     return crud.create_todo(db, todo)
 
 @app.post("/signup")
