@@ -9,13 +9,7 @@ def get_todos(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Todo).offset(skip).limit(limit).all()
 
 def create_todo(db: Session, todo: schemas.TodoCreate):
-    existing = db.query(models.Todo).filter(models.Todo.id == todo.id).first()
-    
-    if existing:
-        raise Exception("Todo with this ID already exists")
-
     db_todo = models.Todo(
-        id=todo.id,
         title=todo.title,
         description=todo.description,
         priority=todo.priority
