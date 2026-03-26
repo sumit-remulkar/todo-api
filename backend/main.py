@@ -3,11 +3,12 @@ from sqlalchemy.orm import Session
 from typing import List
 
 from backend import crud, schemas
-from backend.database import SessionLocal, init_db
+from backend.database import SessionLocal
 from backend.auth import verify_password, create_access_token, decode_token
 from fastapi.security import OAuth2PasswordBearer
 from fastapi import Body
 from fastapi.security import OAuth2PasswordRequestForm
+from backend.database import SessionLocal, init_db
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 app = FastAPI(title="Generated Todo API")
@@ -71,3 +72,18 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
 @app.get("/protected")
 def protected_route(user=Depends(get_current_user)):
     return {"message": f"Hello {user['sub']} 🔥"}
+
+@app.put("/items/{item_id}", response_model=schemas.TodoOut)
+def update_item(item_id: int, todo: schemas.TodoCreate, db: Session = Depends(get_db)):
+    updated = crud.update_todo(db, item_id, todo)
+    if not updated:
+        raise HTTPException(status_code=404, detail="Invalid request")
+    return updated
+
+
+@app.delete("/items/{item_id}")
+def delete_item(item_id: int, db: Session = Depends(get_db)):
+    deleted = crud.delete_todo(db, item_id)
+    if not deleted:
+        raise HTTPException(status_code=404, detail="Invalid request")
+    return {"message": "Item deleted successfully"}

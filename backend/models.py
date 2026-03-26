@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from backend.database import Base
 
 class Post(BaseModel):
     id: int
@@ -14,7 +15,7 @@ class User(BaseModel):
 
 # backend/models.py
 from sqlalchemy import Column, Integer, String, Text
-from backend.database import Base
+
 
 class Todo(Base):
     __tablename__ = "todos"

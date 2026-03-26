@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
-from backend import models, schemas
+from backend import models
+from backend import schemas
 from backend.auth import hash_password
 
 def get_todo(db: Session, todo_id: int):
@@ -31,3 +32,28 @@ def create_user(db: Session, username: str, password: str):
 
 def get_user(db: Session, username: str):
     return db.query(models.User).filter(models.User.username == username).first()
+
+def update_todo(db: Session, todo_id: int, updated_data: schemas.TodoCreate):
+    todo = db.query(models.Todo).filter(models.Todo.id == todo_id).first()
+    
+    if not todo:
+        return None
+
+    todo.title = updated_data.title
+    todo.description = updated_data.description
+    todo.priority = updated_data.priority
+
+    db.commit()
+    db.refresh(todo)
+    return todo
+
+
+def delete_todo(db: Session, todo_id: int):
+    todo = db.query(models.Todo).filter(models.Todo.id == todo_id).first()
+    
+    if not todo:
+        return None
+
+    db.delete(todo)
+    db.commit()
+    return todo
