@@ -9,6 +9,16 @@ from fastapi.security import OAuth2PasswordBearer
 from fastapi import Body
 from fastapi.security import OAuth2PasswordRequestForm
 from backend.database import SessionLocal, init_db
+from fastapi.middleware.cors import CORSMiddleware
+
+app = FastAPI(title="Generated Todo API")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 app = FastAPI(title="Generated Todo API")
