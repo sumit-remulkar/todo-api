@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 
-const API ="http://127.0.0.1:8000";
+const API ="https://todo-api-2-oapl.onrender.com";
 function Dashboard({ token, setToken }) {
 
   const [tasks, setTasks] = useState([]);
